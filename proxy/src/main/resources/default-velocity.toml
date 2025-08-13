@@ -23,6 +23,11 @@ force-key-authentication = true
 # connections but is a weak form of protection.
 prevent-client-proxy-connections = false
 
+# REDIS connection details, custom made!!!!!!!!
+redis_host = "127.0.0.1"
+redis_port = 3000
+redis_database = 10
+
 # Should we forward IP addresses and other data to backend servers?
 # Available options:
 # - "none":        No forwarding will be done. All players will appear to be connecting
@@ -34,7 +39,7 @@ prevent-client-proxy-connections = false
 #                  unable to implement network level firewalling (on a shared host).
 # - "modern":      Forward player IPs and UUIDs as part of the login process using
 #                  Velocity's native forwarding. Only applicable for Minecraft 1.13 or higher.
-player-info-forwarding-mode = "NONE"
+player-info-forwarding-mode = "MODERN"
 
 # If you are using modern or BungeeGuard IP forwarding, configure a file that contains a unique secret here.
 # The file is expected to be UTF-8 encoded and not empty.
@@ -91,12 +96,6 @@ try = [
 "lobby.example.com" = [
     "lobby"
 ]
-"factions.example.com" = [
-    "factions"
-]
-"minigames.example.com" = [
-    "minigames"
-]
 
 [advanced]
 # How large a Minecraft packet has to be before we compress it. Setting this to zero will
@@ -109,20 +108,20 @@ compression-level = -1
 
 # How fast (in milliseconds) are clients allowed to connect after the last connection? By
 # default, this is three seconds. Disable this by setting this to 0.
-login-ratelimit = 3000
+login-ratelimit = 2000
 
 # Specify a custom timeout for connection timeouts here. The default is five seconds.
-connection-timeout = 5000
+connection-timeout = 3000
 
 # Specify a read timeout for connections here. The default is 30 seconds.
-read-timeout = 30000
+read-timeout = 20000
 
 # Enables compatibility with HAProxy's PROXY protocol. If you don't know what this is for, then
 # don't enable it.
 haproxy-protocol = false
 
 # Enables TCP fast open support on the proxy. Requires the proxy to run on Linux.
-tcp-fast-open = false
+tcp-fast-open = true
 
 # Enables BungeeCord plugin messaging channel support on Velocity.
 bungee-plugin-message-channel = true

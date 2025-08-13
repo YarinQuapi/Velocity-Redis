@@ -133,6 +133,8 @@ dependencies {
     implementation(project(":velocity-native"))
     implementation(project(":velocity-proxy-log4j2-plugin"))
 
+    implementation("redis.clients:jedis:6.0.0")
+
     implementation(libs.bundles.log4j)
     implementation(libs.kyori.ansi)
     implementation(libs.netty.codec)

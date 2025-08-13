@@ -94,6 +94,15 @@ public class VelocityConfiguration implements ProxyConfig {
   @Expose
   private boolean forceKeyAuthentication = true; // Added in 1.19
 
+  @Expose
+  private String redisHost = "0.0.0.0";
+  @Expose
+  private int redisPort = 3000;
+  @Expose
+  private String redisPassword = "password";
+  @Expose
+  private int redisDatabase = 10;
+
   private VelocityConfiguration(Servers servers, ForcedHosts forcedHosts, Advanced advanced,
       Query query, Metrics metrics) {
     this.servers = servers;
@@ -109,7 +118,7 @@ public class VelocityConfiguration implements ProxyConfig {
       boolean onlineModeKickExistingPlayers, PingPassthroughMode pingPassthrough,
       boolean samplePlayersInPing, boolean enablePlayerAddressLogging, Servers servers,
       ForcedHosts forcedHosts, Advanced advanced, Query query, Metrics metrics,
-      boolean forceKeyAuthentication) {
+      boolean forceKeyAuthentication, String redisHost, String redisPassword, int redisPort, int redisDatabase) {
     this.bind = bind;
     this.motd = motd;
     this.showMaxPlayers = showMaxPlayers;
@@ -128,6 +137,10 @@ public class VelocityConfiguration implements ProxyConfig {
     this.query = query;
     this.metrics = metrics;
     this.forceKeyAuthentication = forceKeyAuthentication;
+    this.redisHost = redisHost;
+    this.redisPassword = redisPassword;
+    this.redisPort = redisPort;
+    this.redisDatabase = redisDatabase;
   }
 
   /**
@@ -376,6 +389,26 @@ public class VelocityConfiguration implements ProxyConfig {
   }
 
   @Override
+  public String getRedisHost() {
+    return this.redisHost;
+  }
+
+  @Override
+  public String getRedisPassword() {
+    return this.redisPassword;
+  }
+
+  @Override
+  public int getRedisPort() {
+    return this.redisPort;
+  }
+
+  @Override
+  public int getRedisDatabase() {
+    return this.redisDatabase;
+  }
+
+  @Override
   public boolean isForwardCommandsIfRateLimited() {
     return advanced.isForwardCommandsIfRateLimited();
   }
@@ -558,6 +591,11 @@ public class VelocityConfiguration implements ProxyConfig {
       final boolean enablePlayerAddressLogging = config.getOrElse(
               "enable-player-address-logging", true);
 
+      final String redisHost = config.getOrElse("redis_host", "0.0.0.0");
+      final String redisPassword = config.getOrElse("redis_password", "password");
+      final int redisPort = config.getOrElse("redis_port", 3000);
+      final int redisDatabase = config.getOrElse("redis_database", 10);
+
       // Throw an exception if the forwarding-secret file is empty and the proxy is using a
       // forwarding mode that requires it.
       if (forwardingSecret.length == 0
@@ -584,7 +622,11 @@ public class VelocityConfiguration implements ProxyConfig {
               new Advanced(advancedConfig),
               new Query(queryConfig),
               new Metrics(metricsConfig),
-              forceKeyAuthentication
+              forceKeyAuthentication,
+              redisHost,
+              redisPassword,
+              redisPort,
+              redisDatabase
       );
     }
   }

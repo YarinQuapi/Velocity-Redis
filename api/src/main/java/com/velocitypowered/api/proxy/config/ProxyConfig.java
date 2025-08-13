@@ -203,4 +203,10 @@ public interface ProxyConfig {
   default boolean isKickOnTabCompleteRateLimit() {
     return getKickAfterRateLimitedTabCompletes() > 0;
   }
+
+
+  String getRedisHost();
+  String getRedisPassword();
+  int getRedisPort();
+  int getRedisDatabase();
 }

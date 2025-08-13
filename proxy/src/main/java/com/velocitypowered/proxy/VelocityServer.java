@@ -113,6 +113,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import redis.clients.jedis.Jedis;
 
 /**
  * Implementation of {@link ProxyServer}.
@@ -171,6 +172,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   private final VelocityScheduler scheduler;
   private final VelocityChannelRegistrar channelRegistrar = new VelocityChannelRegistrar();
   private final ServerListPingHandler serverListPingHandler;
+  private final Jedis jedis;
 
   VelocityServer(final ProxyOptions options) {
     pluginManager = new VelocityPluginManager(this);
@@ -182,6 +184,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
     servers = new ServerMap(this);
     serverListPingHandler = new ServerListPingHandler(this);
     this.options = options;
+    jedis = new Jedis();
   }
 
   public KeyPair getServerKeyPair() {
@@ -695,6 +698,8 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
    */
   public boolean registerConnection(ConnectedPlayer connection) {
     String lowerName = connection.getUsername().toLowerCase(Locale.US);
+
+    // todo: transform this into REDIS
 
     if (!this.configuration.isOnlineModeKickExistingPlayers()) {
       if (connectionsByName.putIfAbsent(lowerName, connection) != null) {
